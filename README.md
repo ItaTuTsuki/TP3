@@ -28,7 +28,7 @@ pip install -r requirements-dev.txt
 streamlit run app/streamlit_app.py
 
 # big : app seule (les prédictions Spark sont déjà dans big/app/data/)
-cd big
+cd ../big
 pip install -r requirements.txt
 streamlit run app/streamlit_app.py
 
