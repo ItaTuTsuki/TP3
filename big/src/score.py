@@ -8,6 +8,7 @@ Sorties (lues par l'app Streamlit, qui n'a donc pas besoin de Spark) :
   app/data/history.csv.gz      historique des valeurs marchandes de ces joueurs
 """
 import argparse
+import shutil
 import sys
 from pathlib import Path
 
@@ -20,6 +21,9 @@ from pyspark.sql import functions as F  # noqa: E402
 from src import features as T  # noqa: E402
 
 MODEL_DIR = ROOT / "models" / "market_value_model"
+# Le modèle est versionné en zip : Spark génère des noms de fichiers très longs qui
+# dépassent la limite de 260 caractères des chemins Windows lors d'un git clone.
+MODEL_ZIP = ROOT / "models" / "market_value_model.zip"
 OUT_DIR = ROOT / "app" / "data"
 
 
@@ -34,6 +38,8 @@ def main():
     season = args.season or data.agg(F.max("season")).first()[0]
     data = data.filter(F.col("season") == season)
 
+    if not MODEL_DIR.exists():
+        shutil.unpack_archive(MODEL_ZIP, MODEL_DIR)
     model = PipelineModel.load(str(MODEL_DIR))
     leagues = tables["competitions"].select(
         F.col("competition_id").alias("league"),

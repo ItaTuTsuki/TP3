@@ -19,6 +19,8 @@ Chaque dossier a son propre README avec les résultats détaillés et les comman
 
 ## Démarrage rapide
 
+Prérequis : Python 3.11+ (et Java 17+ seulement pour relancer Spark).
+
 ```bash
 # small : notebook + app (Python seul suffit)
 cd small

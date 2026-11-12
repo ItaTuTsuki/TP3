@@ -52,6 +52,8 @@ small/
 
 ## Lancer en local
 
+**Prérequis :** Python 3.11 ou plus récent.
+
 ```bash
 cd small
 python -m venv .venv

@@ -58,7 +58,7 @@ big/
 ├── notebooks/02_transfermarkt_spark.ipynb  # tout le workflow, déjà exécuté
 ├── src/features.py                       # préparation Spark (partagé notebook / scoring)
 ├── src/score.py                          # job de scoring batch (déploiement)
-├── models/                               # pipeline Spark entraîné + métriques
+├── models/                               # pipeline Spark entraîné (zip) + métriques
 ├── app/streamlit_app.py                  # app de consultation
 ├── app/data/                             # prédictions produites par src/score.py
 ├── Dockerfile / Dockerfile.spark         # images app (légère) / Spark (Java + PySpark)
@@ -69,7 +69,7 @@ big/
 
 ## Lancer en local
 
-**Prérequis :** Python 3.10+ et **Java 17 ou 21** (exigé par PySpark 4).
+**Prérequis :** Python 3.11+ et **Java 17 ou 21** (exigé par PySpark 4).
 - Linux / Mac / WSL : `sudo apt install openjdk-21-jdk`
 - Sous Windows natif, Spark demande en plus `winutils.exe`. **Le plus simple est d'utiliser WSL (Ubuntu).**
 
