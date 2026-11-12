@@ -1,0 +1,1 @@
+{"class":"org.apache.spark.ml.feature.ImputerModel","timestamp":1794496215641,"sparkVersion":"4.0.1","uid":"Imputer_68004589f54d","paramMap":{"inputCols":["height_in_cm","prev_log_value"],"strategy":"median","outputCols":["height_in_cm","prev_log_value"]},"defaultParamMap":{"relativeError":0.001,"strategy":"mean","missingValue":"NaN","outputCol":"Imputer_68004589f54d__output"}}

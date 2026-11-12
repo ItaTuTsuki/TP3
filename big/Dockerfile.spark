@@ -1,0 +1,20 @@
+# Image Spark (Python + Java 17 + PySpark) pour le job de scoring et le notebook.
+# Évite d'installer Java / Spark sur la machine (utile sous Windows).
+#   docker build -f Dockerfile.spark -t tp3-transfermarkt-spark .
+#   docker run --rm -v "$PWD/data:/work/data" -v "$PWD/models:/work/models" -v "$PWD/app/data:/work/app/data" tp3-transfermarkt-spark
+FROM python:3.12-slim-bookworm
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends openjdk-17-jre-headless procps \
+    && rm -rf /var/lib/apt/lists/*
+ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+
+WORKDIR /work
+COPY requirements.txt requirements-spark.txt ./
+RUN pip install --no-cache-dir -r requirements-spark.txt
+COPY src/ src/
+COPY scripts/ scripts/
+COPY notebooks/ notebooks/
+
+# Par défaut : télécharge les données si absentes puis lance le scoring Spark
+CMD ["sh", "-c", "python scripts/download_data.py && spark-submit --driver-memory 4g src/score.py"]

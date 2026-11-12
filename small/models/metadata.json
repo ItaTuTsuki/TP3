@@ -1,0 +1,37 @@
+{
+  "model": "Random Forest",
+  "params": {
+    "model__max_depth": 6,
+    "model__min_samples_leaf": 1,
+    "model__n_estimators": 200
+  },
+  "features": [
+    "Goals / match",
+    "Headed goals / match",
+    "Goals with right foot / match",
+    "Goals with left foot / match",
+    "Hit woodwork / match",
+    "Assists / match",
+    "Big chances created / match",
+    "Passes / match",
+    "Crosses / match",
+    "Tackles / match",
+    "Blocked shots / match",
+    "Interceptions / match",
+    "Clearances / match",
+    "Headed Clearance / match",
+    "Fouls / match",
+    "Offsides / match",
+    "Yellow cards / match"
+  ],
+  "classes": [
+    "Defender",
+    "Forward",
+    "Midfielder"
+  ],
+  "cv_f1_macro": 0.8722,
+  "test_accuracy": 0.8514,
+  "test_f1_macro": 0.8517,
+  "n_train_rows": 366,
+  "sklearn_version": "1.9.1"
+}

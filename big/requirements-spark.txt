@@ -1,0 +1,7 @@
+# Dépendances pour le notebook et le job Spark (Java 17 ou 21 requis pour PySpark 4)
+-r requirements.txt
+pyspark==4.0.1
+pyarrow==26.0.1
+matplotlib==3.11.2
+seaborn==0.13.2
+jupyter

@@ -1,0 +1,21 @@
+{
+  "model": "GBTRegressor (Spark ML)",
+  "scenario": "B — A + valeur précédente",
+  "params": {
+    "maxDepth": 5,
+    "maxIter": 120
+  },
+  "train_seasons": "2013-2022",
+  "test_seasons": "2023-2025",
+  "train_rows": 59771,
+  "test_rows": 19871,
+  "metrics_test": {
+    "rmse": 0.4824,
+    "mae": 0.3473,
+    "r2": 0.9064,
+    "erreur absolue médiane (€)": 374558.8942,
+    "erreur relative médiane": 0.2514,
+    "part à ±30 %": 0.5748
+  },
+  "spark_version": "4.0.1"
+}

@@ -1,0 +1,25 @@
+# Pipeline complet avec Docker (aucune installation de Java / Spark nécessaire)
+#
+#   docker compose run --rm score     # job Spark : données -> prédictions (app/data/)
+#   docker compose up app             # app Streamlit -> http://localhost:8501
+#   docker compose up notebook        # Jupyter avec Spark -> http://localhost:8888
+services:
+  score:
+    build: { context: ., dockerfile: Dockerfile.spark }
+    volumes:
+      - ./data:/work/data
+      - ./models:/work/models
+      - ./app/data:/work/app/data
+
+  notebook:
+    build: { context: ., dockerfile: Dockerfile.spark }
+    command: jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser --allow-root --IdentityProvider.token=''
+    ports: ["8888:8888"]
+    volumes:
+      - ./:/work
+
+  app:
+    build: .
+    ports: ["8501:8501"]
+    volumes:
+      - ./app/data:/app/app/data
