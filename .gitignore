@@ -1,10 +1,3 @@
-# Fichiers de travail locaux (non publiés)
-_raw/
-AVANCEMENT.md
-consignes.txt
-*.url
-publier_github.ps1
-
 # Python / Jupyter
 .venv/
 __pycache__/
@@ -12,7 +5,7 @@ __pycache__/
 .ipynb_checkpoints/
 .streamlit/secrets.toml
 
-# Données big data (≈ 930 Mo) : à télécharger avec Big/scripts/download_data.py
+# Données big data (environ 930 Mo) : à télécharger avec Big/scripts/download_data.py
 Big/data/raw/
 Big/data/parquet/
 
@@ -20,4 +13,3 @@ Big/data/parquet/
 spark-warehouse/
 metastore_db/
 derby.log
-partie2-transfermarkt-spark/

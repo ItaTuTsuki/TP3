@@ -1,4 +1,4 @@
-# Données brutes (≈ 930 Mo) : à télécharger avec scripts/download_data.py
+# Données brutes (environ 930 Mo) : à télécharger avec scripts/download_data.py
 data/raw/
 data/parquet/
 # Python / Jupyter
