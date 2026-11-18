@@ -1,41 +1,41 @@
-# 💶 Transfermarkt — Estimer la valeur marchande des joueurs avec Spark
+# TP3 Big : estimer la valeur marchande des joueurs avec Spark
 
-TP3_ID06 — **dossier `Big/` (cas personnel n° 2, big data)** : workflow complet de Machine Learning **big data** avec Apache Spark (PySpark).
+Dossier `Big/` du TP3 (cas personnel n° 2, big data) : toutes les étapes d'un projet de Machine Learning sur un gros dataset, avec Apache Spark (PySpark).
 
-**Auteur :** Hugo EXERTIER (ID 06), cours Big Data 5A (Mohamed Quafafou).
+Hugo EXERTIER (ID 06), cours de Big Data 5A.
 
-> **Question :** à partir des performances d'un joueur sur une saison et de son profil, peut-on estimer sa valeur marchande ?
+Question : à partir des performances d'un joueur sur une saison et de son profil, peut-on estimer sa valeur marchande ?
 
 - Notebooks d'origine : [football-player-market-value-prediction](https://github.com/Anubhav1989/football-player-market-value-prediction) (Anubhav1989), 8 notebooks pandas / scikit-learn qui prédisent la valeur marchande sur ce même dataset. Ils n'utilisent pas PySpark : le traitement est entièrement refait ici avec Spark, sur tout l'historique (voir la première cellule du notebook pour les problèmes rencontrés et les modifications, et la conclusion pour la comparaison des résultats).
-- Dataset Kaggle : [Football Data from Transfermarkt](https://www.kaggle.com/datasets/davidcariboo/player-scores) — environ 930 Mo de CSV, **1,9 M de matchs joués**, 1,3 M d'événements de match, 656 000 valeurs marchandes, 50 000 joueurs (données arrêtées en juillet 2026).
+- Dataset Kaggle : [Football Data from Transfermarkt](https://www.kaggle.com/datasets/davidcariboo/player-scores) : environ 930 Mo de CSV, 1,9 M de matchs joués, 1,3 M d'événements de match, 656 000 valeurs marchandes, 50 000 joueurs (données arrêtées en juillet 2026).
 
 ## Workflow
 
 | Étape | Contenu | Où |
 |---|---|---|
-| **Data** | session Spark, lecture des CSV, **conversion en Parquet** (taille divisée par environ 10) | notebook §1 |
-| **EDA** | agrégations Spark : distribution (log), inflation des valeurs, poste, âge, championnat | notebook §2 |
-| **Prétraitement** | valeurs manquantes, aberrantes, définition des saisons (juillet → juin) | notebook §3, `src/features.py` |
-| **Transformation** | **1,9 M de matchs agrégés en stats joueur × saison** (`groupBy`, jointure broadcast), cible issue de la **dernière valeur de la saison** (fonctions de fenêtre), valeur précédente (`lag`) | notebook §4, `src/features.py` |
-| **Machine Learning** | Pipelines **Spark ML** : régression linéaire, Random Forest, GBT ; scénario A (performances + profil) vs scénario B (+ valeur précédente) ; `CrossValidator` | notebook §5 |
-| **Évaluation** | découpage **temporel** (train 2013-2022 / test 2023-2025), RMSE, MAE, R², erreur en €, importance des variables, erreurs par poste | notebook §6 |
-| **Déploiement** | pipeline Spark sauvegardé, **job batch** `src/score.py` (`spark-submit`), **app Streamlit**, images **Docker** et `docker-compose` | `models/`, `src/score.py`, `app/`, `Dockerfile*` |
+| Data | session Spark, lecture des CSV, conversion en Parquet (taille divisée par environ 10) | notebook §1 |
+| EDA | agrégations Spark : distribution (log), inflation des valeurs, poste, âge, championnat | notebook §2 |
+| Prétraitement | valeurs manquantes, aberrantes, définition des saisons (de juillet à juin) | notebook §3, `src/features.py` |
+| Transformation | 1,9 M de matchs agrégés en stats joueur × saison (`groupBy`, jointure broadcast), cible issue de la dernière valeur de la saison (fonctions de fenêtre), valeur précédente (`lag`) | notebook §4, `src/features.py` |
+| Machine Learning | Pipelines Spark ML : régression linéaire, Random Forest, GBT ; scénario A (performances + profil) vs scénario B (+ valeur précédente) ; `CrossValidator` | notebook §5 |
+| Évaluation | découpage temporel (train 2013-2022 / test 2023-2025), RMSE, MAE, R², erreur en €, importance des variables, erreurs par poste | notebook §6 |
+| Déploiement | pipeline Spark sauvegardé, job batch `src/score.py` (`spark-submit`), app Streamlit, images Docker et `docker-compose` | `models/`, `src/score.py`, `app/`, `Dockerfile*` |
 
 ## Résultats
 
-Dataset final : **79 642 lignes joueur × saison**, construites à partir de 1,9 M de matchs et 656 000 évaluations. Entraînement sur les saisons 2013-2022 (59 771 lignes), test sur 2023-2025 (19 871 lignes). La cible est `log(valeur)`.
+Dataset final : 79 642 lignes joueur × saison, construites à partir de 1,9 M de matchs et 656 000 évaluations. Entraînement sur les saisons 2013-2022 (59 771 lignes), test sur 2023-2025 (19 871 lignes). La cible est `log(valeur)`.
 
 | Scénario | Modèle | RMSE (log) | R² |
 |---|---|---|---|
-| A — performances + profil | Régression linéaire | 0,889 | 0,682 |
+| A : performances + profil | Régression linéaire | 0,889 | 0,682 |
 | | Random Forest | 0,841 | 0,716 |
 | | GBT | 0,814 | 0,734 |
-| B — A + valeur de la saison précédente | Régression linéaire | 0,589 | 0,861 |
+| B : A + valeur de la saison précédente | Régression linéaire | 0,589 | 0,861 |
 | | Random Forest | 0,549 | 0,879 |
 | | GBT | 0,487 | 0,905 |
-| **B — GBT optimisé** (`CrossValidator`, maxDepth = 5, maxIter = 120) | | **0,482** | **0,906** |
+| B, GBT optimisé (`CrossValidator`, maxDepth = 5, maxIter = 120) | | 0,482 | 0,906 |
 
-Pour le modèle retenu, sur les saisons de test : **erreur relative médiane de 25 %**, erreur absolue médiane d'environ 375 k€, et 57 % des joueurs estimés à ±30 % de leur vraie valeur.
+Pour le modèle retenu, sur les saisons de test : erreur relative médiane de 25 %, erreur absolue médiane d'environ 375 k€, et 57 % des joueurs estimés à ±30 % de leur vraie valeur.
 - Avec seulement les performances et le profil (scénario A), le modèle explique déjà 73 % de la variance.
 - La valeur précédente apporte beaucoup, car Transfermarkt fait évoluer ses valeurs par petites touches.
 - Les variables les plus importantes (GBT) sont la valeur précédente (51 %), l'âge (14 %), le championnat (13 %), puis le nombre de matchs et les minutes jouées.
@@ -51,7 +51,7 @@ data/raw/*.csv ──► Parquet ──► src/features.py ──► Pipeline Sp
                                    app/data/predictions.csv.gz ──► app/streamlit_app.py
 ```
 
-L'entraînement et le scoring sont faits **en batch par Spark**. L'app web lit seulement les prédictions : elle n'a besoin ni de Java ni de Spark, et se déploie gratuitement.
+L'entraînement et le scoring sont faits en batch par Spark. L'app web lit seulement les prédictions : elle n'a besoin ni de Java ni de Spark, et se déploie gratuitement.
 
 ## Structure
 
@@ -72,17 +72,17 @@ Big/
 
 ## Lancer en local
 
-**Prérequis :** Python 3.11+ et **Java 17 ou 21** (exigé par PySpark 4).
+Prérequis : Python 3.11+ et Java 17 ou 21 (exigé par PySpark 4).
 - Linux / Mac / WSL : `sudo apt install openjdk-21-jdk`
-- Sous Windows natif, Spark demande en plus `winutils.exe`. **Le plus simple est d'utiliser WSL (Ubuntu).**
+- Sous Windows natif, Spark demande en plus `winutils.exe`. Le plus simple est d'utiliser WSL (Ubuntu).
 
 ```bash
 cd Big
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements-spark.txt
 
-python scripts/download_data.py                        # ≈ 240 Mo (Kaggle, ou miroir officiel de l'auteur)
-jupyter notebook notebooks/02_transfermarkt_spark.ipynb  # workflow complet (≈ 10-20 min)
+python scripts/download_data.py                        # environ 240 Mo (Kaggle, ou miroir officiel de l'auteur)
+jupyter notebook notebooks/02_transfermarkt_spark.ipynb  # workflow complet (10 à 20 min)
 spark-submit src/score.py                              # ou : python src/score.py
 streamlit run app/streamlit_app.py
 ```
@@ -101,21 +101,21 @@ docker compose up notebook      # Jupyter + Spark -> http://localhost:8888
 
 ### Sur Kaggle (sans rien installer)
 
-1. Créer un notebook Kaggle, puis **Add Input** et choisir le dataset `davidcariboo/player-scores`.
-2. Importer `notebooks/02_transfermarkt_spark.ipynb` (File → Import Notebook).
+1. Créer un notebook Kaggle, puis Add Input et choisir le dataset `davidcariboo/player-scores`.
+2. Importer `notebooks/02_transfermarkt_spark.ipynb` (File, puis Import Notebook).
 3. La première cellule télécharge automatiquement `Big/src/features.py` depuis ce repo GitHub.
 4. Activer Internet dans les paramètres, puis exécuter `!pip install pyspark` si PySpark est absent.
 
 ## Déployer l'app en ligne (gratuit)
 
 1. Pousser le repo sur GitHub (les prédictions `app/data/` sont versionnées).
-2. Aller sur [share.streamlit.io](https://share.streamlit.io) et cliquer sur **Create app**.
-3. Choisir le repo `TP3_ID06` et le fichier `Big/app/streamlit_app.py`, puis cliquer sur **Deploy**.
+2. Aller sur [share.streamlit.io](https://share.streamlit.io) et cliquer sur Create app.
+3. Choisir le repo `TP3_ID06` et le fichier `Big/app/streamlit_app.py`, puis cliquer sur Deploy.
 
 ## Pourquoi Spark ?
 
-- **Volume :** environ 930 Mo de CSV et des millions de lignes à joindre et agréger. Avec pandas, c'est lent et gourmand en mémoire ; Spark parallélise sur tous les cœurs.
-- **Passage à l'échelle :** le même code tourne sur un cluster (YARN, Kubernetes, Databricks) en changeant seulement `master`. Il resterait donc valable pour des données 100× plus grosses, par exemple des données de tracking.
-- **Outils big data :** format Parquet, jointures broadcast, fonctions de fenêtre, pipelines ML et validation croisée distribués.
+- Volume : environ 930 Mo de CSV et des millions de lignes à joindre et agréger. Avec pandas, c'est lent et gourmand en mémoire ; Spark parallélise sur tous les cœurs.
+- Passage à l'échelle : le même code tourne sur un cluster (YARN, Kubernetes, Databricks) en changeant seulement `master`. Il resterait donc valable pour des données 100× plus grosses, par exemple des données de tracking.
+- Outils big data : format Parquet, jointures broadcast, fonctions de fenêtre, pipelines ML et validation croisée distribués.
 
 À comparer avec le dossier [`Small/`](../Small) (Premier League, environ 400 lignes), où pandas et scikit-learn suffisent.
