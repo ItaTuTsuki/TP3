@@ -81,8 +81,8 @@ cd Big
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements-spark.txt
 
-python scripts/download_data.py                        # ≈ 250 Mo à télécharger
-jupyter notebook notebooks/02_transfermarkt_spark.ipynb  # workflow complet (≈ 15-20 min)
+python scripts/download_data.py                        # ≈ 240 Mo (Kaggle, ou miroir officiel de l'auteur)
+jupyter notebook notebooks/02_transfermarkt_spark.ipynb  # workflow complet (≈ 10-20 min)
 spark-submit src/score.py                              # ou : python src/score.py
 streamlit run app/streamlit_app.py
 ```
