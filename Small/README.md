@@ -1,8 +1,8 @@
 # ⚽ Premier League — Prédire le poste d'un joueur (ML classique)
 
-TP3_ID6 — **dossier `Small/` (cas personnel n° 1, small data)** : workflow complet de Machine Learning sur un petit dataset, complété par un traitement PySpark.
+TP3_ID06 — **dossier `Small/` (cas personnel n° 1, small data)** : workflow complet de Machine Learning sur un petit dataset, complété par un traitement PySpark.
 
-**Auteur :** Hugo EXERTIER (ID 6), cours Big Data 5A (Mohamed Quafafou).
+**Auteur :** Hugo EXERTIER (ID 06), cours Big Data 5A (Mohamed Quafafou).
 
 > **Question :** peut-on deviner si un joueur est défenseur, milieu ou attaquant uniquement à partir de ses statistiques ?
 > **Réponse :** oui, dans environ **85 % des cas** (F1 macro de 0,85 sur le jeu de test, contre 33 % au hasard).
@@ -83,7 +83,7 @@ Ouvrir ensuite http://localhost:8501. L'image contient Python, les dépendances,
 
 1. Pousser le repo sur GitHub.
 2. Aller sur [share.streamlit.io](https://share.streamlit.io), se connecter avec GitHub, puis cliquer sur **Create app**.
-3. Choisir le repo `TP3_ID6`, la branche `main` et le fichier `Small/app/streamlit_app.py`, puis cliquer sur **Deploy**.
+3. Choisir le repo `TP3_ID06`, la branche `main` et le fichier `Small/app/streamlit_app.py`, puis cliquer sur **Deploy**.
 
 Streamlit Cloud installe `requirements.txt` automatiquement. Le modèle est versionné dans `models/`, il n'y a donc rien à réentraîner.
 

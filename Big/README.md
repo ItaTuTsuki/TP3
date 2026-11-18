@@ -1,8 +1,8 @@
 # 💶 Transfermarkt — Estimer la valeur marchande des joueurs avec Spark
 
-TP3_ID6 — **dossier `Big/` (cas personnel n° 2, big data)** : workflow complet de Machine Learning **big data** avec Apache Spark (PySpark).
+TP3_ID06 — **dossier `Big/` (cas personnel n° 2, big data)** : workflow complet de Machine Learning **big data** avec Apache Spark (PySpark).
 
-**Auteur :** Hugo EXERTIER (ID 6), cours Big Data 5A (Mohamed Quafafou).
+**Auteur :** Hugo EXERTIER (ID 06), cours Big Data 5A (Mohamed Quafafou).
 
 > **Question :** à partir des performances d'un joueur sur une saison et de son profil, peut-on estimer sa valeur marchande ?
 
@@ -110,7 +110,7 @@ docker compose up notebook      # Jupyter + Spark -> http://localhost:8888
 
 1. Pousser le repo sur GitHub (les prédictions `app/data/` sont versionnées).
 2. Aller sur [share.streamlit.io](https://share.streamlit.io) et cliquer sur **Create app**.
-3. Choisir le repo `TP3_ID6` et le fichier `Big/app/streamlit_app.py`, puis cliquer sur **Deploy**.
+3. Choisir le repo `TP3_ID06` et le fichier `Big/app/streamlit_app.py`, puis cliquer sur **Deploy**.
 
 ## Pourquoi Spark ?
 

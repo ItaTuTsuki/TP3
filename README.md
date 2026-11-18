@@ -1,6 +1,6 @@
-# TP3_ID6 — Deux cas personnels : small data et big data ⚽
+# TP3_ID06 — Deux cas personnels : small data et big data ⚽
 
-**Auteur :** Hugo EXERTIER (ID 6), cours Big Data 5A (Mohamed Quafafou), rendu du 18/11/2026.
+**Auteur :** Hugo EXERTIER (ID 06), cours Big Data 5A (Mohamed Quafafou), rendu du 18/11/2026.
 
 Deux études complètes autour du football, qui suivent le même workflow :
 
