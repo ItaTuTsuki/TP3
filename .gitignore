@@ -12,9 +12,9 @@ __pycache__/
 .ipynb_checkpoints/
 .streamlit/secrets.toml
 
-# Données big data (≈ 930 Mo) : à télécharger avec big/scripts/download_data.py
-big/data/raw/
-big/data/parquet/
+# Données big data (≈ 930 Mo) : à télécharger avec Big/scripts/download_data.py
+Big/data/raw/
+Big/data/parquet/
 
 # Spark
 spark-warehouse/

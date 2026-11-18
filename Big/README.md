@@ -1,9 +1,12 @@
 # 💶 Transfermarkt — Estimer la valeur marchande des joueurs avec Spark
 
-TP3 Big Data — **dossier `big/` (partie 2)** : workflow complet de Machine Learning **big data** avec Apache Spark (PySpark).
+TP3_ID6 — **dossier `Big/` (cas personnel n° 2, big data)** : workflow complet de Machine Learning **big data** avec Apache Spark (PySpark).
+
+**Auteur :** Hugo EXERTIER (ID 6), cours Big Data 5A (Mohamed Quafafou).
 
 > **Question :** à partir des performances d'un joueur sur une saison et de son profil, peut-on estimer sa valeur marchande ?
 
+- Notebooks d'origine : [football-player-market-value-prediction](https://github.com/Anubhav1989/football-player-market-value-prediction) (Anubhav1989), 8 notebooks pandas / scikit-learn qui prédisent la valeur marchande sur ce même dataset. Ils n'utilisent pas PySpark : le traitement est entièrement refait ici avec Spark, sur tout l'historique (voir la première cellule du notebook pour les problèmes rencontrés et les modifications, et la conclusion pour la comparaison des résultats).
 - Dataset Kaggle : [Football Data from Transfermarkt](https://www.kaggle.com/datasets/davidcariboo/player-scores) — environ 930 Mo de CSV, **1,9 M de matchs joués**, 1,3 M d'événements de match, 656 000 valeurs marchandes, 50 000 joueurs (données arrêtées en juillet 2026).
 
 ## Workflow
@@ -53,7 +56,7 @@ L'entraînement et le scoring sont faits **en batch par Spark**. L'app web lit s
 ## Structure
 
 ```
-big/
+Big/
 ├── scripts/download_data.py              # télécharge le dataset Kaggle dans data/raw/
 ├── notebooks/02_transfermarkt_spark.ipynb  # tout le workflow, déjà exécuté
 ├── src/features.py                       # préparation Spark (partagé notebook / scoring)
@@ -74,7 +77,7 @@ big/
 - Sous Windows natif, Spark demande en plus `winutils.exe`. **Le plus simple est d'utiliser WSL (Ubuntu).**
 
 ```bash
-cd big
+cd Big
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements-spark.txt
 
@@ -87,7 +90,7 @@ streamlit run app/streamlit_app.py
 ### Avec Docker (sans installer Java ni Spark)
 
 ```bash
-cd big
+cd Big
 docker compose run --rm score   # télécharge les données si besoin, puis job Spark -> app/data/
 docker compose up app           # app Streamlit -> http://localhost:8501
 docker compose up notebook      # Jupyter + Spark -> http://localhost:8888
@@ -100,14 +103,14 @@ docker compose up notebook      # Jupyter + Spark -> http://localhost:8888
 
 1. Créer un notebook Kaggle, puis **Add Input** et choisir le dataset `davidcariboo/player-scores`.
 2. Importer `notebooks/02_transfermarkt_spark.ipynb` (File → Import Notebook).
-3. La première cellule télécharge automatiquement `big/src/features.py` depuis ce repo GitHub.
+3. La première cellule télécharge automatiquement `Big/src/features.py` depuis ce repo GitHub.
 4. Activer Internet dans les paramètres, puis exécuter `!pip install pyspark` si PySpark est absent.
 
 ## Déployer l'app en ligne (gratuit)
 
 1. Pousser le repo sur GitHub (les prédictions `app/data/` sont versionnées).
 2. Aller sur [share.streamlit.io](https://share.streamlit.io) et cliquer sur **Create app**.
-3. Choisir le repo `TP3` et le fichier `big/app/streamlit_app.py`, puis cliquer sur **Deploy**.
+3. Choisir le repo `TP3_ID6` et le fichier `Big/app/streamlit_app.py`, puis cliquer sur **Deploy**.
 
 ## Pourquoi Spark ?
 
@@ -115,4 +118,4 @@ docker compose up notebook      # Jupyter + Spark -> http://localhost:8888
 - **Passage à l'échelle :** le même code tourne sur un cluster (YARN, Kubernetes, Databricks) en changeant seulement `master`. Il resterait donc valable pour des données 100× plus grosses, par exemple des données de tracking.
 - **Outils big data :** format Parquet, jointures broadcast, fonctions de fenêtre, pipelines ML et validation croisée distribués.
 
-À comparer avec le dossier [`small/`](../small) (Premier League, environ 400 lignes), où pandas et scikit-learn suffisent.
+À comparer avec le dossier [`Small/`](../Small) (Premier League, environ 400 lignes), où pandas et scikit-learn suffisent.

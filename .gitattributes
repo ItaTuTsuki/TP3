@@ -1,5 +1,5 @@
 # Modèle Spark : fichiers vérifiés par des sommes .crc -> ne jamais convertir les fins de ligne
-big/models/** -text
+Big/models/** -text
 *.parquet binary
 *.gz binary
 *.joblib binary

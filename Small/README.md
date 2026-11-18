@@ -1,11 +1,13 @@
 # ⚽ Premier League — Prédire le poste d'un joueur (ML classique)
 
-TP3 Big Data — **dossier `small/` (partie 1)** : workflow complet de Machine Learning sur un petit dataset (pas de big data).
+TP3_ID6 — **dossier `Small/` (cas personnel n° 1, small data)** : workflow complet de Machine Learning sur un petit dataset, complété par un traitement PySpark.
+
+**Auteur :** Hugo EXERTIER (ID 6), cours Big Data 5A (Mohamed Quafafou).
 
 > **Question :** peut-on deviner si un joueur est défenseur, milieu ou attaquant uniquement à partir de ses statistiques ?
 > **Réponse :** oui, dans environ **85 % des cas** (F1 macro de 0,85 sur le jeu de test, contre 33 % au hasard).
 
-- Exemple Kaggle de départ : [English Premier League Players Statistics](https://www.kaggle.com/code/desalegngeb/english-premier-league-players-statistics/notebook) (EDA seule, prolongée ici sur tout le workflow)
+- Notebook Kaggle d'origine : [English Premier League Players Statistics](https://www.kaggle.com/code/desalegngeb/english-premier-league-players-statistics/notebook) (EDA seule avec pandas, prolongée ici sur tout le workflow puis complétée avec PySpark)
 - Dataset : [Premier League player statistics](https://www.kaggle.com/datasets/rishikeshkanabar/premier-league-player-statistics-updated-daily) (snapshot du 24/09/2020, 571 joueurs, 59 colonnes), copié dans `data/`
 
 ## Workflow
@@ -19,6 +21,9 @@ TP3 Big Data — **dossier `small/` (partie 1)** : workflow complet de Machine L
 | **Machine Learning** | régression logistique, Random Forest, Gradient Boosting, recherche d'hyperparamètres par `GridSearchCV` ; **bonus :** clustering KMeans + ACP | notebook §5 |
 | **Évaluation** | validation croisée stratifiée à 5 plis, F1 macro, matrice de confusion, importance par permutation, analyse des erreurs | notebook §6 |
 | **Déploiement** | modèle sauvegardé (`models/`), **app Streamlit** et image **Docker** | `app/streamlit_app.py`, `Dockerfile` |
+| **PySpark** (complément) | lecture, prétraitement, transformation (vérifiée identique à pandas), Spark SQL, Spark ML (régression logistique, Random Forest) sur les mêmes joueurs de test, comparaison avec scikit-learn | notebook §8 |
+
+La première cellule du notebook décrit la contribution (exécution de bout en bout, problèmes rencontrés, modifications), et chaque section est précédée d'une cellule `## [Étape]`.
 
 ## Résultats
 
@@ -33,7 +38,7 @@ Sur le jeu de test : **accuracy 85,1 %**, F1 macro 0,852. Le poste le plus diffi
 ## Structure
 
 ```
-small/
+Small/
 ├── data/epl_players_2020.csv      # dataset (96 Ko)
 ├── notebooks/01_epl_workflow.ipynb # tout le workflow, déjà exécuté
 ├── src/features.py                 # prétraitement + transformation (partagé notebook / app)
@@ -52,10 +57,10 @@ small/
 
 ## Lancer en local
 
-**Prérequis :** Python 3.11 ou plus récent.
+**Prérequis :** Python 3.11 ou plus récent, et Java 17 ou 21 pour la section PySpark du notebook (sous Windows : WSL ou Docker).
 
 ```bash
-cd small
+cd Small
 python -m venv .venv
 # Windows : .venv\Scripts\activate     Linux/Mac : source .venv/bin/activate
 pip install -r requirements-dev.txt
@@ -67,7 +72,7 @@ streamlit run app/streamlit_app.py                  # lancer l'app
 ## Lancer avec Docker (sans installer Python)
 
 ```bash
-cd small
+cd Small
 docker build -t tp3-epl .
 docker run -p 8501:8501 tp3-epl
 ```
@@ -78,10 +83,10 @@ Ouvrir ensuite http://localhost:8501. L'image contient Python, les dépendances,
 
 1. Pousser le repo sur GitHub.
 2. Aller sur [share.streamlit.io](https://share.streamlit.io), se connecter avec GitHub, puis cliquer sur **Create app**.
-3. Choisir le repo `TP3`, la branche `main` et le fichier `small/app/streamlit_app.py`, puis cliquer sur **Deploy**.
+3. Choisir le repo `TP3_ID6`, la branche `main` et le fichier `Small/app/streamlit_app.py`, puis cliquer sur **Deploy**.
 
 Streamlit Cloud installe `requirements.txt` automatiquement. Le modèle est versionné dans `models/`, il n'y a donc rien à réentraîner.
 
 ## Pourquoi pas de big data ici ?
 
-Environ 370 joueurs × 17 colonnes, soit quelques Ko : pandas et scikit-learn suffisent largement, et Spark n'apporterait que de la complexité. C'est l'inverse du dossier [`big/`](../big) (Transfermarkt, millions de lignes, Spark).
+Environ 370 joueurs × 17 colonnes, soit quelques Ko : pandas et scikit-learn suffisent largement. La section PySpark (demandée par les consignes, puisque le notebook d'origine n'utilise pas Spark) montre que Spark donne les mêmes données et des scores comparables, mais avec plus de code et un démarrage plus lent : il ne devient intéressant que pour des volumes beaucoup plus gros, comme dans le dossier [`Big/`](../Big) (Transfermarkt, millions de lignes).
